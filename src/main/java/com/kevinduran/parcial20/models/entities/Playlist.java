@@ -43,6 +43,7 @@ public class Playlist {
 	private User user;
 	
 	@OneToMany(mappedBy = "playlist", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<SongxPlaylist> songxPlaylists;
 
 	

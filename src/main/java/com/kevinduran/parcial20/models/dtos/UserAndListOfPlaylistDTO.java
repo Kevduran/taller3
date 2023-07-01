@@ -1,7 +1,8 @@
 package com.kevinduran.parcial20.models.dtos;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
 
 import com.kevinduran.parcial20.models.entities.Playlist;
 import com.kevinduran.parcial20.models.entities.User;
@@ -16,11 +17,11 @@ public class UserAndListOfPlaylistDTO {
 	private Optional<User> user;
 	
 	
-	private List<Playlist> playlists;
+	private Page<Playlist> playlists;
 
-	public UserAndListOfPlaylistDTO(Optional<User> user, List<Playlist> playlists2) {
+	public UserAndListOfPlaylistDTO(Optional<User> user, Page<Playlist> playlists) {
 		this.user = user;
-		this.playlists = playlists2;
+		this.playlists = playlists;
 	}
 	
 	

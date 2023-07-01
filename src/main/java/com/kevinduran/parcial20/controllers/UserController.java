@@ -1,28 +1,21 @@
 package com.kevinduran.parcial20.controllers;
 
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kevinduran.parcial20.models.dtos.MessageDTO;
 import com.kevinduran.parcial20.models.dtos.SaveUserDTO;
 import com.kevinduran.parcial20.models.dtos.TokenDTO;
-import com.kevinduran.parcial20.models.dtos.UserAndListOfPlaylistDTO;
 import com.kevinduran.parcial20.models.dtos.UserLoginDTO;
 import com.kevinduran.parcial20.models.entities.Token;
 import com.kevinduran.parcial20.models.entities.User;
-import com.kevinduran.parcial20.services.PlaylistService;
 import com.kevinduran.parcial20.services.UserService;
 import com.kevinduran.parcial20.utils.RequestErrorHandler;
 
@@ -34,9 +27,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private PlaylistService playlistService;
 	
 	@Autowired
 	private RequestErrorHandler errorHandler;

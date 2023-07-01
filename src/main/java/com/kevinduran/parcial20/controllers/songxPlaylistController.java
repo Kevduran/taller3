@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kevinduran.parcial20.models.dtos.FindSongByPlaylistDTO;
 import com.kevinduran.parcial20.models.dtos.MessageDTO;
 import com.kevinduran.parcial20.models.dtos.SaveSongDTO;
-import com.kevinduran.parcial20.models.dtos.ShowPlaylist;
+import com.kevinduran.parcial20.models.dtos.ShowsongbyPlaylistDTO;
 import com.kevinduran.parcial20.models.entities.Playlist;
 import com.kevinduran.parcial20.models.entities.Song;
 import com.kevinduran.parcial20.models.entities.SongxPlaylist;
@@ -37,6 +40,7 @@ public class songxPlaylistController {
 	
 	@Autowired
 	private PlaylistService playlistService;
+	
 	
 	//@Autowired
 	//private PlaylistService playlistService;
@@ -71,7 +75,8 @@ public class songxPlaylistController {
 	
 	
 	@GetMapping("/all/{playlist_code}")
-	public ResponseEntity<?> findallsongs(@PathVariable("playlist_code") String playlist_code){
+	public ResponseEntity<?> findallsongs(@PathVariable("playlist_code") String playlist_code,
+											@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
 		
 		UUID playlistUuid = UUID.fromString(playlist_code);
 		
@@ -80,7 +85,8 @@ public class songxPlaylistController {
 		if(playlist==null) {
 			return new ResponseEntity<>(new MessageDTO("Playlist No encontrada"), HttpStatus.NOT_FOUND);
 		} else {
-			List<SongxPlaylist> songxPlaylist = songxPlaylistService.findAllSongsByPlaylist(playlist);
+			Pageable pageable =  PageRequest.of(page, size);
+			Page<SongxPlaylist> songxPlaylist = songxPlaylistService.findAllSongsByPlaylist(pageable, playlist);
 			List<Song> songsCodes = new ArrayList<>();
 			
 			songxPlaylist.forEach(s->{
@@ -89,11 +95,9 @@ public class songxPlaylistController {
 				
 			});
 			
+			ShowsongbyPlaylistDTO songsDto = new ShowsongbyPlaylistDTO(playlist,songsCodes);
 			
-			//ShowSongxPlaylist showSongxPlaylist = new ShowSongxPlaylist(playlist, songsCodes);
-			
-			return new ResponseEntity<>(songsCodes, HttpStatus.OK);
-			//return new ResponseEntity<>(showSongxPlaylist, HttpStatus.OK);
+			return new ResponseEntity<>(songsDto, HttpStatus.OK);
 			
 		}
 	}

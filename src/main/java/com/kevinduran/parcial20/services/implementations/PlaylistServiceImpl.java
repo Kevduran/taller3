@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kevinduran.parcial20.models.dtos.SavePlaylistDTO;
@@ -65,11 +67,11 @@ public class PlaylistServiceImpl implements PlaylistService {
 	}
 
 	@Override
-	public UserAndListOfPlaylistDTO getUserAndPlaylists(UUID uuid) throws Exception {
+	public UserAndListOfPlaylistDTO getUserAndPlaylists(Pageable pageable, UUID uuid) throws Exception {
 		Optional<User> user = userRepository.findById(uuid);
 		
 		if(user!=null) {
-			List<Playlist> playlists = playlistRepository.findAllByUser(user);
+			Page<Playlist> playlists = playlistRepository.findAllByUser(pageable, user);
 			return new UserAndListOfPlaylistDTO(user, playlists);
 		}else {
 			throw new Exception();
@@ -79,11 +81,11 @@ public class PlaylistServiceImpl implements PlaylistService {
 	}
 
 	@Override
-	public UserAndListOfPlaylistDTO getUserAndPlaylistsWithFragment(UUID uuid, String fragment) throws Exception {
+	public UserAndListOfPlaylistDTO getUserAndPlaylistsWithFragment(Pageable pageable, UUID uuid, String fragment) throws Exception {
 		Optional<User> user = userRepository.findById(uuid);
 		
 		if(user!=null) {
-			List<Playlist> playlists = playlistRepository.findAllByUserAndTitleContaining(user, fragment);
+			Page<Playlist> playlists = playlistRepository.findAllByUserAndTitleContaining(pageable, user, fragment);
 			return new UserAndListOfPlaylistDTO(user, playlists);
 		}else {
 			throw new Exception();

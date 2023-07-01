@@ -3,6 +3,8 @@ package com.kevinduran.parcial20.repositories;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.ListCrudRepository;
 
 import com.kevinduran.parcial20.models.entities.Playlist;
@@ -14,6 +16,6 @@ public interface SongxPlaylistRepository
 
 	List<Song> findSongByPlaylist(Playlist playlist);
 
-	List<SongxPlaylist> findAllSongsByPlaylist(Playlist playlist);
+	Page<SongxPlaylist> findAllSongsByPlaylist(Pageable pageable, Playlist playlist);
 	
 }

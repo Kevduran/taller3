@@ -3,6 +3,8 @@ package com.kevinduran.parcial20.controllers;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -66,7 +68,11 @@ public class PlaylistController {
 	
 	
 	@GetMapping("/all")
-	public ResponseEntity<?> showAllPlaylist(@RequestParam(value = "fragment", required = false) String fragment){
+	public ResponseEntity<?> showAllPlaylist(@RequestParam(name = "fragment", required = false) String fragment,
+													@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+		
+		Pageable pageable = PageRequest.of(page, size);
+		
 		if (fragment!=null) {
 			
 			try { 
@@ -75,7 +81,7 @@ public class PlaylistController {
 				if (user!=null) {
 					UUID uuid = user.getCode();
 					 
-					UserAndListOfPlaylistDTO userAndList = playlistService.getUserAndPlaylistsWithFragment(uuid, fragment);
+					UserAndListOfPlaylistDTO userAndList = playlistService.getUserAndPlaylistsWithFragment(pageable, uuid, fragment);
 					return new ResponseEntity<>(userAndList, HttpStatus.OK);
 				}else {
 					return new ResponseEntity<>(new MessageDTO("Usuario no encontrado"), HttpStatus.NOT_FOUND);
@@ -94,7 +100,7 @@ public class PlaylistController {
 					
 					UUID uuid = user.getCode();
 					
-					UserAndListOfPlaylistDTO userAndList = playlistService.getUserAndPlaylists(uuid);
+					UserAndListOfPlaylistDTO userAndList = playlistService.getUserAndPlaylists(pageable, uuid);
 					return new ResponseEntity<>(userAndList, HttpStatus.OK);
 				}else {
 					return new ResponseEntity<>(new MessageDTO("Usuario no encontrado"), HttpStatus.NOT_FOUND);

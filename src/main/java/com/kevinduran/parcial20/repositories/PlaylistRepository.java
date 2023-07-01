@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kevinduran.parcial20.models.entities.Playlist;
 import com.kevinduran.parcial20.models.entities.User;
 
 public interface PlaylistRepository 
-			extends ListCrudRepository<Playlist, UUID> {
+			extends JpaRepository<Playlist, UUID> {
 
 	Playlist findOneByTitle(String title);
 
@@ -18,11 +20,11 @@ public interface PlaylistRepository
 	
 	List<Playlist> findByUserCodeAndTitleContaining(UUID id, String fragment);
 
-	List<Playlist> findAllByUser(Optional<User> user);
+	Page<Playlist> findAllByUser(Pageable pageable, Optional<User> user);
 
 	Optional<Playlist> findByUser(Optional<User> user);
 
-	List<Playlist> findAllByUserAndTitleContaining(Optional<User> user, String fragment);
+	Page<Playlist> findAllByUserAndTitleContaining(Pageable pageable, Optional<User> user, String fragment);
 
 	Playlist findByCode(UUID uuid);
 

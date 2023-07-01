@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kevinduran.parcial20.models.entities.Playlist;
@@ -55,8 +57,8 @@ public class SongxPlaylistServiceImpl implements SongxPlaylistService{
 	}
 
 	@Override
-	public List<SongxPlaylist> findAllSongsByPlaylist(Playlist playlist) {
-		List<SongxPlaylist> songxPlaylist = songxPlaylistRepository.findAllSongsByPlaylist(playlist);
+	public Page<SongxPlaylist> findAllSongsByPlaylist(Pageable pageable, Playlist playlist) {
+		Page<SongxPlaylist> songxPlaylist = songxPlaylistRepository.findAllSongsByPlaylist(pageable, playlist);
 		return songxPlaylist;
 	}
 	

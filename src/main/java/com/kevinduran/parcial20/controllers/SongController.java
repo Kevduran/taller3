@@ -1,8 +1,9 @@
 package com.kevinduran.parcial20.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,17 @@ public class SongController {
 	private SongService songService;
 	
 	@GetMapping("/")
-	public ResponseEntity<?> findAllSong(@RequestParam(value = "fragment", required = false) String fragment){
+	public ResponseEntity<?> findAllSong(@RequestParam(value = "fragment", required = false) String fragment, 
+									@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
+		
+		Pageable pageable = PageRequest.of(page, size);
 		
 		if (fragment != null) {
-			List<Song> songs = songService.findByTitle(fragment);
+			Page<Song> songs = songService.findByTitle(pageable, fragment);
 			return new ResponseEntity<>(songs, HttpStatus.OK);
 		}else {
-			List<Song> songs = songService.findAll();
+			
+			Page<Song> songs = songService.findAll(pageable);
 			return new ResponseEntity<>(songs, HttpStatus.OK);
 		}
 		
